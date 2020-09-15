@@ -1,0 +1,18 @@
+{% extends 'base.html' %}
+{% block content %}
+
+<h1>Axe List</h1>
+
+{% for axe in axes %}
+  <div class="card">
+    <div class="card-content">
+      <span class="card-title">{{ axe.name }}</span>
+      <p>Year: {{ axe.year }}</p>
+      <p>Make: {{ axe.make }}</p>
+      <p>Model: {{ axe.model }}</p>
+      <p>Description: {{ axe.description }}</p>
+    </div>
+  </div>
+{% endfor %}
+
+{% endblock %}
