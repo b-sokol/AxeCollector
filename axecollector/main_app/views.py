@@ -1,27 +1,19 @@
 from django.shortcuts import render
+from .models import Axe
 from django.http import HttpResponse
-
-class Axe:
-  def __init__(self, name, make, model, description, year):
-    self.name = name
-    self.year = year
-    self.make = make
-    self.model = model
-    self.description = description
-
-axes = [
-  Axe('Marilyn', 'Fender', 'American Vintage Reissue 1952 Telecaster', 'Road worn 52 Tele reissue, mint green pickguard, reversed control plate, blackguard replica electronics', 2013),
-]
 
 # Create your views here.
 
 def home(request):
-    return HttpResponse('<h1>🤘</h1>')
+    return render(request, 'home.html')
 
 def about(request):
     return render(request, 'about.html')
 
 def axes_index(request):
+    axes = Axe.objects.all()
     return render(request, 'axes/index.html', { 'axes': axes })
 
-
+def axes_detail(request, axe_id):
+    axe = Axe.objects.get(id=axe_id)
+    return render(request, 'axes/detail.html', { 'axe': axe })
