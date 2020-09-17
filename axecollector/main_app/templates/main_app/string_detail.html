@@ -1,0 +1,23 @@
+{% extends 'base.html' %}
+{% block content %}
+
+<h1>Strings Details</h1>
+
+<div class="row">
+  <div class="col s6 col-offset-3">
+    <div class="card">
+      <div class="card-content">
+        <span class="card-title">{{ string.name }}</span>
+        {%if string.material %}
+          <p>Material: {{ string.material }}</p>
+        {% endif %}
+        <p>Guage: {{ string.guage }}</p>
+      </div>
+      <div class="card-action">
+        <a href="{% url 'strings_update' string.id %}">Edit</a>
+        <a href="{% url 'strings_delete' string.id %}">Delete</a>
+      </div>
+    </div>
+  </div>
+</div>
+{% endblock %}

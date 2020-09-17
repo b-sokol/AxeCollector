@@ -1,0 +1,20 @@
+{% extends 'base.html' %}
+{% block content %}
+
+<h1>Strings List</h1>
+
+{% for string in string_list %}
+  <a href="{% url 'strings_detail' string.id %}">
+    <div class="card">
+        <div class="card-content">
+            <span class="card-title">{{ string.name}}</span>
+           {%if string.material %}
+              <p>Material: {{ string.material }}</p>
+            {% endif %}
+            <p>Guage: {{ string.guage }}</p>
+        </div>
+    </div>
+  </a>
+{% endfor %}
+
+{% endblock %}

@@ -11,6 +11,21 @@ SERVICES = (
   ('F', 'Fretwork'),
 )
 
+class String(models.Model):
+  brand = models.CharField(max_length=50)
+  line = models.CharField(max_length=50)
+  material = models.CharField(max_length=50, blank=True)
+  guage = models.CharField(max_length=50)
+  @property
+  def name(self):
+    return "%s - %s" % ( self.brand, self.line )
+  
+  def __str__(self):
+    return self.name
+
+  def get_absolute_url(self):
+    return reverse('strings_detail', kwargs={'pk': self.id})
+
 # Create your models here.
 class Axe(models.Model):
   name = models.CharField(max_length=100)
@@ -20,6 +35,7 @@ class Axe(models.Model):
   color = models.CharField(max_length=100)
   serial_number = models.CharField(max_length=100, blank=True)
   description = models.TextField(max_length=250)
+  strings = models.ManyToManyField(String)
 
   def __str__(self):
     return self.name

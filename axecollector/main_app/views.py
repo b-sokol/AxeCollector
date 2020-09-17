@@ -1,6 +1,7 @@
 from django.shortcuts import render, redirect
 from django.views.generic.edit import CreateView, UpdateView, DeleteView
-from .models import Axe
+from django.views.generic import ListView, DetailView
+from .models import Axe, String
 from .forms import MaintenanceForm
 
 # Create your views here.
@@ -41,3 +42,21 @@ def add_maintenance(request, axe_id):
     new_maintenance.axe_id = axe_id
     new_maintenance.save()
   return redirect('detail', axe_id=axe_id)
+
+class StringList(ListView):
+  model = String
+
+class StringDetail(DetailView):
+  model = String
+
+class StringCreate(CreateView):
+  model = String
+  fields = '__all__'
+
+class StringUpdate(UpdateView):
+  model = String
+  fields = ['brand', 'name', 'material', 'guage']
+
+class StringDelete(DeleteView):
+  model = String
+  success_url = '/strings/'
