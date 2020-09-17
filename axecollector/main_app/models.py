@@ -28,7 +28,7 @@ class Axe(models.Model):
     return reverse('detail', kwargs={'axe_id': self.id})
 
   def needs_service(self):
-    return self.maintenance_set.count() == 0 or self.maintenance_set.last().date.__str__() <= (date.today()+relativedelta(months=-1)).__str__()
+    return self.maintenance_set.count() == 0 or self.maintenance_set.first().date.__str__() <= (date.today()+relativedelta(months=-1)).__str__()
 
 class Maintenance(models.Model):
   date = models.DateField('maintenance date')
