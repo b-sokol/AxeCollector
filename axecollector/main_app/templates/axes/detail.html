@@ -3,18 +3,65 @@
 
 <h1>Axe Details</h1>
 
-<div class="card">
-  <div class="card-content">
-    <span class="card-title">{{ axe.name }}</span>
-    <p>Year: {{ axe.year }}</p>
-    <p>Make: {{ axe.make }}</p>
-    <p>Model: {{ axe.model }}</p>
-    <p>Color: {{ axe.color }}</p>
-    {% if axe.serial_number%}
-        <p>Serial Number: {{ axe.serial_number }}</p>
-    {% endif%}
-    <p>Description: {{ axe.description }}</p>
+<div class="row">
+  <div class="col s6">
+    <div class="card">
+      <div class="card-content">
+        <span class="card-title">{{ axe.name }}</span>
+        <p>Year: {{ axe.year }}</p>
+        <p>Make: {{ axe.make }}</p>
+        <p>Model: {{ axe.model }}</p>
+        <p>Color: {{ axe.color }}</p>
+        {% if axe.serial_number%}
+          <p>Serial Number: {{ axe.serial_number }}</p>
+        {% endif%}
+        <p>Description: {{ axe.description }}</p>
+      </div>
+      <div class="card-action">
+        <a href="{% url 'axes_update' axe.id %}">Edit</a>
+        <a href="{% url 'axes_delete' axe.id %}">Delete</a>
+      </div>
+    </div>
+  </div>
+  <div class="col s6">
+      <form action="{% url 'add_maintenance' axe.id %}" method="POST">
+      {% csrf_token %}
+      {{ maintenance_form.as_p }}
+      <input type="submit" value="Add Maintenance" class="btn">
+    </form>
+    <br>
+    {% if axe.needs_service %}
+      <div class="card-panel red-text center-align">{{axe.name}} might need some love, how are the strings and setup looking?</div>
+    {% else %}
+      <div class="card-panel teal-text center-align">{{axe.name}} should be good to go!</div>
+    {% endif %} 
+    <table class="striped">
+      <thead>
+        <tr><th>Date</th><th>Service</th><th>Technician</th></tr>
+      </thead>
+      <tbody>
+        {% for maintenance in axe.maintenance_set.all %}
+          <tr>
+            <td>{{maintenance.date}}</td>
+            <td>{{maintenance.get_service_display}}</td>
+            <td>{{maintenance.technician}}</td>
+          </tr>
+        {% endfor %}
+      </tbody>
+    </table>
   </div>
 </div>
+
+<script>
+  const dateEl = document.getElementById('id_date');
+  M.Datepicker.init(dateEl, {
+    format: 'yyyy-mm-dd',
+    defaultDate: new Date(),
+    setDefaultDate: true,
+    autoClose: true
+  });
+  const selectEl = document.getElementById('id_service')
+  M.FormSelect.init(selectEl);
+</script>
 
 {% endblock %}

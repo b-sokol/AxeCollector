@@ -1,14 +1,47 @@
 from django.db import models
+from django.urls import reverse
+from datetime import date
+from dateutil.relativedelta import relativedelta, MO
+
+SERVICES = (
+  ('R', 'Restring'),
+  ('S', 'Setup'),
+  ('E', 'Electronics'),
+  ('C', 'Structural Repair'),
+  ('F', 'Fretwork'),
+)
 
 # Create your models here.
 class Axe(models.Model):
-    name = models.CharField(max_length=100)
-    year = models.IntegerField()
-    make = models.CharField(max_length=100)
-    model = models.CharField(max_length=100)
-    color = models.CharField(max_length=100)
-    serial_number = models.CharField(max_length=100, blank=True)
-    description = models.TextField(max_length=250)
-    
-    def __str__(self):
-        return self.name
+  name = models.CharField(max_length=100)
+  year = models.IntegerField()
+  make = models.CharField(max_length=100)
+  model = models.CharField(max_length=100)
+  color = models.CharField(max_length=100)
+  serial_number = models.CharField(max_length=100, blank=True)
+  description = models.TextField(max_length=250)
+
+  def __str__(self):
+    return self.name
+
+  def get_absolute_url(self):
+    return reverse('detail', kwargs={'axe_id': self.id})
+
+  def needs_service(self):
+    return self.maintenance_set.count() == 0 or self.maintenance_set.last().date.__str__() <= (date.today()+relativedelta(months=-1)).__str__()
+
+class Maintenance(models.Model):
+  date = models.DateField('maintenance date')
+  service = models.CharField(
+    max_length=1,
+    choices=SERVICES,
+    default=SERVICES[0][0]
+    )
+  technician = models.CharField(max_length=50, default='Me')
+  axe = models.ForeignKey(Axe, on_delete=models.CASCADE)
+
+  def __str__(self):
+    return f'{self.get_service_display()} on {self.date}'
+  
+  class Meta:
+    ordering = ['-date']

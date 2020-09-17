@@ -1,6 +1,6 @@
 from django.contrib import admin
+from .models import Axe, Maintenance
 
 # Register your models here.
-from .models import Axe
-
 admin.site.register(Axe)
+admin.site.register(Maintenance)
