@@ -58,7 +58,7 @@ class StringCreate(CreateView):
 
 class StringUpdate(UpdateView):
   model = String
-  fields = ['brand', 'name', 'material', 'guage']
+  fields = '__all__'
 
 class StringDelete(DeleteView):
   model = String

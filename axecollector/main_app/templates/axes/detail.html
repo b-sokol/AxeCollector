@@ -16,6 +16,9 @@
           <p>Serial Number: {{ axe.serial_number }}</p>
         {% endif%}
         <p>Description: {{ axe.description }}</p>
+        {% if axe.setup_specs%}
+          <p>Setup Specifications: {{ axe.setup_specs }}</p>
+        {% endif%}
       </div>
       <div class="card-action">
         <a href="{% url 'axes_update' axe.id %}">Edit</a>

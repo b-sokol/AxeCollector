@@ -34,6 +34,7 @@ class Axe(models.Model):
   color = models.CharField(max_length=100)
   serial_number = models.CharField(max_length=100, blank=True)
   description = models.TextField(max_length=250)
+  setup_specs = models.TextField(max_length=250, blank=True)
   strings = models.ManyToManyField(String)
 
   def __str__(self):
