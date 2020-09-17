@@ -18,10 +18,15 @@ def axes_index(request):
 
 def axes_detail(request, axe_id):
   axe = Axe.objects.get(id=axe_id)
+  strings_not_on_axe = String.objects.exclude(id__in = axe.strings.all().values_list('id'))
   maintenance_form = MaintenanceForm()
   return render(request, 'axes/detail.html', {
-    'axe': axe, 'maintenance_form': maintenance_form 
+    'axe': axe, 'maintenance_form': maintenance_form, 'strings': strings_not_on_axe 
   })
+  
+def assoc_string(request, axe_id, string_id):
+  Axe.objects.get(id=axe_id).strings.add(string_id)
+  return redirect('detail', axe_id=axe_id)
 
 class AxeCreate(CreateView):
   model = Axe

@@ -18,7 +18,7 @@ class String(models.Model):
   guage = models.CharField(max_length=50)
   @property
   def name(self):
-    return "%s - %s" % ( self.brand, self.line )
+    return "%s %s" % ( self.brand, self.line )
   
   def __str__(self):
     return self.name
