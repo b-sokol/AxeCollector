@@ -26,7 +26,6 @@ class String(models.Model):
   def get_absolute_url(self):
     return reverse('strings_detail', kwargs={'pk': self.id})
 
-# Create your models here.
 class Axe(models.Model):
   name = models.CharField(max_length=100)
   year = models.IntegerField()

@@ -4,8 +4,6 @@ from django.views.generic import ListView, DetailView
 from .models import Axe, String
 from .forms import MaintenanceForm
 
-# Create your views here.
-
 def home(request):
   return render(request, 'home.html')
 
