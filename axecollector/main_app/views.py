@@ -3,7 +3,7 @@ from django.views.generic.edit import CreateView, UpdateView, DeleteView
 from django.views.generic import ListView, DetailView
 import uuid
 import boto3
-from .models import Axe, String, Photo
+from .models import Axe, String, AxePhoto, StringPhoto
 from .forms import MaintenanceForm
 
 S3_BASE_URL = 'https://s3.us-east-2.amazonaws.com/'
@@ -78,19 +78,28 @@ class StringDelete(DeleteView):
   model = String
   success_url = '/strings/'
   
-def add_photo(request, axe_id):
+def add_axe_photo(request, axe_id):
   photo_file = request.FILES.get('photo-file', None)
   if photo_file:
-      s3 = boto3.client('s3')
-      # need a unique "key" for S3 / needs image file extension too
-      key = uuid.uuid4().hex[:6] + photo_file.name[photo_file.name.rfind('.'):]
-      # just in case something goes wrong
-      try:
-          s3.upload_fileobj(photo_file, BUCKET, key)
-          # build the full url string
-          url = f"{S3_BASE_URL}{BUCKET}/{key}"
-          # we can assign to axe_id or axe (if you have a axe object)
-          Photo.objects.create(url=url, axe_id=axe_id)
-      except:
-          print('An error occurred uploading file to S3')
+    s3 = boto3.client('s3')
+    key = uuid.uuid4().hex[:6] + photo_file.name[photo_file.name.rfind('.'):]
+    try:
+      s3.upload_fileobj(photo_file, BUCKET, key)
+      url = f"{S3_BASE_URL}{BUCKET}/{key}"
+      AxePhoto.objects.create(url=url, axe_id=axe_id)
+    except:
+      print('An error occurred uploading file to S3')
   return redirect('detail', axe_id=axe_id)
+
+def add_string_photo(request, string_id):
+  photo_file = request.FILES.get('photo-file', None)
+  if photo_file:
+    s3 = boto3.client('s3')
+    key = uuid.uuid4().hex[:6] + photo_file.name[photo_file.name.rfind('.'):]
+    try:
+      s3.upload_fileobj(photo_file, BUCKET, key)
+      url = f"{S3_BASE_URL}{BUCKET}/{key}"
+      StringPhoto.objects.create(url=url, string_id=string_id)
+    except:
+      print('An error occurred uploading file to S3')
+  return redirect('detail', string_id=string_id)
