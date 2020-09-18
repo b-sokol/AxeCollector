@@ -8,7 +8,7 @@ from django.contrib.auth.mixins import LoginRequiredMixin
 import uuid
 import boto3
 from .models import Axe, String, AxePhoto, StringPhoto
-from .forms import MaintenanceForm
+from .forms import MaintenanceForm, RegistrationForm
 
 S3_BASE_URL = 'https://s3.us-east-2.amazonaws.com/'
 BUCKET = 'axecollector'
@@ -121,15 +121,15 @@ def add_string_photo(request, string_id):
   return redirect('detail', string_id=string_id)
 
 def signup(request):
-  error_message=''
+  error_message = ''
   if request.method == 'POST':
-    form = UserCreationForm(request.POST)
+    form = RegistrationForm(request.POST)
     if form.is_valid():
       user = form.save()
       login(request, user)
       return redirect('index')
     else:
-      error_message = 'Invalid sign up - please try again'
-  form = UserCreationForm()
+      error_message = 'Invalid sign up - try again'
+  form = RegistrationForm()
   context = {'form': form, 'error_message': error_message}
-  return render(request, 'registration/signup.html, context')
+  return render(request, 'registration/signup.html', context)
