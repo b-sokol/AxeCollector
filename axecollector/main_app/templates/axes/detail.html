@@ -90,6 +90,18 @@
               {{ string.guage }}
             </span>
           </div>
+          <div class="card-action">
+            <form action="{% url 'curr_string' axe.id string.id %}" method="post">
+              {% csrf_token %}
+              <button type="submit" class="btn">Set As Current Strings</button>
+            </form>
+          </div>
+          <div class="card-action">
+            <form action="{% url 'remove_string' axe.id string.id %}" method="post">
+              {% csrf_token %}
+              <button type="submit" class="btn red smaller-font">Remove Strings From {{ axe.name }}'s History</button>
+            </form>
+          </div>
         </div>
       {% endfor %}
     {% else %}
@@ -97,7 +109,7 @@
     {% endif %}
   </div>
   <div class="col s6">
-    <h3>Available Strings</h3>
+    <h3>Strings That Have Not Yet Been Tried on {{axe.name}}</h3>
     {% if strings.count %}
       {% for string in strings.all %}
         <div class="card">
@@ -119,7 +131,7 @@
         </div>
       {% endfor %}
     {% else %}
-      <h5>{{axe.name}} Has Used All Available Strings</h5>
+      <h5>{{axe.name}} Has Tried All Available Strings</h5>
     {% endif %}
   </div>
 </div>

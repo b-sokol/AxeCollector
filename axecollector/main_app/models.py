@@ -2,6 +2,7 @@ from django.db import models
 from django.urls import reverse
 from datetime import date
 from dateutil.relativedelta import relativedelta, MO
+from sortedm2m.fields import SortedManyToManyField
 
 SERVICES = (
   ('R', 'Restring'),
@@ -35,7 +36,7 @@ class Axe(models.Model):
   serial_number = models.CharField(max_length=100, blank=True)
   description = models.TextField(max_length=250)
   setup_specs = models.TextField(max_length=250, blank=True)
-  strings = models.ManyToManyField(String)
+  strings = SortedManyToManyField(String, blank=True)
 
   def __str__(self):
     return self.name

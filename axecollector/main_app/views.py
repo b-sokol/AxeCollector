@@ -26,6 +26,15 @@ def assoc_string(request, axe_id, string_id):
   Axe.objects.get(id=axe_id).strings.add(string_id)
   return redirect('detail', axe_id=axe_id)
 
+def curr_string(request, axe_id, string_id):
+  Axe.objects.get(id=axe_id).strings.remove(string_id)
+  Axe.objects.get(id=axe_id).strings.add(string_id)
+  return redirect('detail', axe_id=axe_id)
+
+def remove_string(request, axe_id, string_id):
+  Axe.objects.get(id=axe_id).strings.remove(string_id)
+  return redirect('detail', axe_id=axe_id)
+
 class AxeCreate(CreateView):
   model = Axe
   fields = '__all__'
