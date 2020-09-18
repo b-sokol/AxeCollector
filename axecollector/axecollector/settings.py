@@ -56,17 +56,17 @@ ROOT_URLCONF = 'axecollector.urls'
 
 TEMPLATES = [
   {
-    'BACKEND': 'django.template.backends.django.DjangoTemplates',
-    'DIRS': [],
-    'APP_DIRS': True,
-    'OPTIONS': {
-      'context_processors': [
-        'django.template.context_processors.debug',
-        'django.template.context_processors.request',
-        'django.contrib.auth.context_processors.auth',
-        'django.contrib.messages.context_processors.messages',
-      ],
-    },
+  'BACKEND': 'django.template.backends.django.DjangoTemplates',
+  'DIRS': [],
+  'APP_DIRS': True,
+  'OPTIONS': {
+    'context_processors': [
+    'django.template.context_processors.debug',
+    'django.template.context_processors.request',
+    'django.contrib.auth.context_processors.auth',
+    'django.contrib.messages.context_processors.messages',
+    ],
+  },
   },
 ]
 
@@ -78,8 +78,8 @@ WSGI_APPLICATION = 'axecollector.wsgi.application'
 
 DATABASES = {
   'default': {
-    'ENGINE': 'django.db.backends.postgresql',
-    'NAME': 'axecollector',
+  'ENGINE': 'django.db.backends.postgresql',
+  'NAME': 'axecollector',
   }
 }
 
@@ -89,16 +89,16 @@ DATABASES = {
 
 AUTH_PASSWORD_VALIDATORS = [
   {
-    'NAME': 'django.contrib.auth.password_validation.UserAttributeSimilarityValidator',
+  'NAME': 'django.contrib.auth.password_validation.UserAttributeSimilarityValidator',
   },
   {
-    'NAME': 'django.contrib.auth.password_validation.MinimumLengthValidator',
+  'NAME': 'django.contrib.auth.password_validation.MinimumLengthValidator',
   },
   {
-    'NAME': 'django.contrib.auth.password_validation.CommonPasswordValidator',
+  'NAME': 'django.contrib.auth.password_validation.CommonPasswordValidator',
   },
   {
-    'NAME': 'django.contrib.auth.password_validation.NumericPasswordValidator',
+  'NAME': 'django.contrib.auth.password_validation.NumericPasswordValidator',
   },
 ]
 
@@ -121,3 +121,7 @@ USE_TZ = True
 # https://docs.djangoproject.com/en/3.1/howto/static-files/
 
 STATIC_URL = '/static/'
+
+LOGIN_REDIRECT_URL = '/axes/'
+
+LOGOUT_REDIRECT_URL = '/'

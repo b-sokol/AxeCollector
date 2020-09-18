@@ -3,6 +3,7 @@ from django.urls import reverse
 from datetime import date
 from dateutil.relativedelta import relativedelta, MO
 from sortedm2m.fields import SortedManyToManyField
+from django.contrib.auth.models import User
 
 SERVICES = (
   ('R', 'Restring'),
@@ -37,6 +38,7 @@ class Axe(models.Model):
   description = models.TextField(max_length=250)
   setup_specs = models.TextField(max_length=250, blank=True)
   strings = SortedManyToManyField(String, blank=True)
+  user = models.ForeignKey(User, on_delete=models.CASCADE)
 
   def __str__(self):
     return self.name

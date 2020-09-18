@@ -13,11 +13,12 @@ urlpatterns = [
   path('axes/<int:axe_id>/add_axe_photo/', views.add_axe_photo, name='add_axe_photo'),
   path('axes/<int:axe_id>/assoc_string/<int:string_id>/', views.assoc_string, name='assoc_string'),
   path('axes/<int:axe_id>/curr_string/<int:string_id>/', views.curr_string, name='curr_string'),
-  path('axes/<int:axe_id>/remove_string/<int:string_id>/', views.remove_string, name='remove_string'),
+  path('axes/<int:axe_id>/unassoc_string/<int:string_id>/', views.unassoc_string, name='unassoc_string'),
   path('strings/', views.StringList.as_view(), name='strings_index'),
   path('strings/<int:pk>/', views.StringDetail.as_view(), name='strings_detail'),
   path('strings/<int:pk>/add_string_photo/', views.add_string_photo, name='add_string_photo'),
   path('strings/create/', views.StringCreate.as_view(), name='strings_create'),
   path('strings/<int:pk>/update/', views.StringUpdate.as_view(), name='strings_update'),
   path('strings/<int:pk>/delete/', views.StringDelete.as_view(), name='strings_delete'),
+  path('accounts/signup/', views.signup, name='signup'),
 ]

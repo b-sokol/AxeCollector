@@ -1,6 +1,10 @@
 from django.shortcuts import render, redirect
 from django.views.generic.edit import CreateView, UpdateView, DeleteView
 from django.views.generic import ListView, DetailView
+from django.contrib.auth import login
+from django.contrib.auth.forms import UserCreationForm
+from django.contrib.auth.decorators import login_required
+from django.contrib.auth.mixins import LoginRequiredMixin
 import uuid
 import boto3
 from .models import Axe, String, AxePhoto, StringPhoto
@@ -15,10 +19,12 @@ def home(request):
 def about(request):
   return render(request, 'about.html')
 
+@login_required
 def axes_index(request):
-  axes = Axe.objects.all()
+  axes = request.user.axe_set.all()
   return render(request, 'axes/index.html', { 'axes': axes })
 
+@login_required
 def axes_detail(request, axe_id):
   axe = Axe.objects.get(id=axe_id)
   strings_not_on_axe = String.objects.exclude(id__in = axe.strings.all().values_list('id'))
@@ -26,32 +32,40 @@ def axes_detail(request, axe_id):
   return render(request, 'axes/detail.html', {
     'axe': axe, 'maintenance_form': maintenance_form, 'strings': strings_not_on_axe 
   })
-  
+
+@login_required
 def assoc_string(request, axe_id, string_id):
   Axe.objects.get(id=axe_id).strings.add(string_id)
   return redirect('detail', axe_id=axe_id)
 
+@login_required
 def curr_string(request, axe_id, string_id):
   Axe.objects.get(id=axe_id).strings.remove(string_id)
   Axe.objects.get(id=axe_id).strings.add(string_id)
   return redirect('detail', axe_id=axe_id)
 
-def remove_string(request, axe_id, string_id):
+@login_required
+def unassoc_string(request, axe_id, string_id):
   Axe.objects.get(id=axe_id).strings.remove(string_id)
   return redirect('detail', axe_id=axe_id)
 
-class AxeCreate(CreateView):
+class AxeCreate(LoginRequiredMixin, CreateView):
   model = Axe
   fields = '__all__'
 
-class AxeUpdate(UpdateView):
+  def form_valid(self, form):
+    form.instance.user = self.request.user
+    return super().form_valid(form)
+
+class AxeUpdate(LoginRequiredMixin, UpdateView):
   model = Axe
   fields = '__all__'
 
-class AxeDelete(DeleteView):
+class AxeDelete(LoginRequiredMixin, DeleteView):
   model = Axe
   success_url = '/axes/'
 
+@login_required
 def add_maintenance(request, axe_id):
   form = MaintenanceForm(request.POST)
   if form.is_valid():
@@ -60,24 +74,25 @@ def add_maintenance(request, axe_id):
     new_maintenance.save()
   return redirect('detail', axe_id=axe_id)
 
-class StringList(ListView):
+class StringList(LoginRequiredMixin, ListView):
   model = String
 
-class StringDetail(DetailView):
+class StringDetail(LoginRequiredMixin, DetailView):
   model = String
 
-class StringCreate(CreateView):
-  model = String
-  fields = '__all__'
-
-class StringUpdate(UpdateView):
+class StringCreate(LoginRequiredMixin, CreateView):
   model = String
   fields = '__all__'
 
-class StringDelete(DeleteView):
+class StringUpdate(LoginRequiredMixin, UpdateView):
+  model = String
+  fields = '__all__'
+
+class StringDelete(LoginRequiredMixin, DeleteView):
   model = String
   success_url = '/strings/'
-  
+
+@login_required
 def add_axe_photo(request, axe_id):
   photo_file = request.FILES.get('photo-file', None)
   if photo_file:
@@ -91,6 +106,7 @@ def add_axe_photo(request, axe_id):
       print('An error occurred uploading file to S3')
   return redirect('detail', axe_id=axe_id)
 
+@login_required
 def add_string_photo(request, string_id):
   photo_file = request.FILES.get('photo-file', None)
   if photo_file:
@@ -103,3 +119,17 @@ def add_string_photo(request, string_id):
     except:
       print('An error occurred uploading file to S3')
   return redirect('detail', string_id=string_id)
+
+def signup(request):
+  error_message=''
+  if request.method == 'POST':
+    form = UserCreationForm(request.POST)
+    if form.is_valid():
+      user = form.save()
+      login(request, user)
+      return redirect('index')
+    else:
+      error_message = 'Invalid sign up - please try again'
+  form = UserCreationForm()
+  context = {'form': form, 'error_message': error_message}
+  return render(request, 'registration/signup.html, context')

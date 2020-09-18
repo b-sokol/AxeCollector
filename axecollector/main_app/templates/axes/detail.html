@@ -108,7 +108,7 @@
             </form>
           </div>
           <div class="card-action">
-            <form action="{% url 'remove_string' axe.id string.id %}" method="post">
+            <form action="{% url 'unassoc_string' axe.id string.id %}" method="post">
               {% csrf_token %}
               <button type="submit" class="btn red smaller-font">Remove Strings From {{ axe.name }}'s History</button>
             </form>
