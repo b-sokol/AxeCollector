@@ -24,7 +24,7 @@
         <div class="nav-wrapper">
           <ul>
             <li>
-              <a href="/" class="left brand-logo">&nbsp;&nbsp;AxeCollector</a>
+              <a href="/" class="left brand-logo">&nbsp;&nbsp;{% if user.is_authenticated %}{{ user.first_name }} {{user.last_name}}'s {% endif %}Axe Collector</a>
             </li>
           </ul>
           <ul class="right">
